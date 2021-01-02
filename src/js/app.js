@@ -1,5 +1,6 @@
 "use strict";
 import * as THREE from "three";
+import { createPoints } from "./points";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 (() => {
   window.addEventListener(
@@ -59,6 +60,9 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
   let points; // パーティクル
   let controls; // カメラコントロール
   let axesHelper; // 軸ヘルパーメッシュ
+  let texture;
+  let knot;
+  const SIZE = 10.0; // どの程度の範囲に配置するかのサイズ
 
   // カメラに関するパラメータ
   const CAMERA_PARAM = {
@@ -104,51 +108,31 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
     camera.position.set(CAMERA_PARAM.x, CAMERA_PARAM.y, CAMERA_PARAM.z);
     camera.lookAt(CAMERA_PARAM.lookAt);
 
-    materialPoint = new THREE.PointsMaterial(MATERIAL_PARAM_POINT);
+    // materialPoint = new THREE.PointsMaterial(MATERIAL_PARAM_POINT);
+    // materialPoint.map = knot;
 
-    // - パーティクルを定義する -------------------------------------------
-    // サンプル 016 のときは、ループ構造を使って点が規則正しく整列するように
-    // していましたが、ここでは乱数を使ってバラバラに頂点を配置しています。
-    // このようなランダムな頂点の配置は手軽な割に、見た目が非常に美しくなる
-    // ので、これをベースにオリジナルの工夫を凝らしてみるのもいいかもしれま
-    // せん。
-    // --------------------------------------------------------------------
     // パーティクルの定義 @@@
     geometry = new THREE.Geometry(); // 特定の形状を持たない素体ジオメトリ
-    const COUNT = 10000; // パーティクルの純粋な個数
-    const SIZE = 20.0; // どの程度の範囲に配置するかのサイズ
+
+    const COUNT = 5000; // パーティクルの純粋な個数
+
     for (let i = 0; i <= COUNT; ++i) {
       // Math.random は 0 以上 1 未満の数値をランダムで返す
       // const x = (Math.random() - 0.5) * 2.0 * SIZE;
       // const y = (Math.random() - 0.5) * 2.0 * SIZE;
       // const z = (Math.random() - 0.5) * 2.0 * SIZE;
       const theta = 2.0 * Math.PI * Math.random();
-      const x = Math.cos(theta) * SIZE;
-      const y = Math.sin(theta) * SIZE;
+      const x = Math.cos(theta) * (SIZE + Math.random() * 5);
+      const y = Math.sin(theta) * (SIZE + Math.random() * 5);
       const z = (Math.random() - 0.5) * 2.0 * SIZE;
 
       const point = new THREE.Vector3(x, y, z);
       point.velocityZ = Math.random();
       geometry.vertices.push(point);
     }
-    // . 余談（JavaScript の Math.random） ................................
-    // JavaScript では Math.random を使って乱数を得ることができます。
-    // このとき得られるランダムな値は 0.0 以上 ～ 1.0 未満になります。
-    // JavaScript の元になっている ECMAScript の言語仕様上は、Math.random の
-    // 「戻り値の範囲」については記載がありますが、どのように乱数を生成する
-    // のか（アルゴリズム）については言及がありません。
-    // 2020 年現在、主要なウェブブラウザは XorShift を使っているようです。
-    // 注意しなければならないのは、モバイルブラウザなど、メジャーブラウザで
-    // はない実装上では乱数生成のアルゴリズムや精度が異なる可能性があること
-    // です。
-    // 乱数は、結構奥が深いジャンルです。コンピューターサイエンスにある程度
-    // 習熟していないと正しく理解することは難しいと言えます。深淵を覗いてみ
-    // たい好奇心旺盛な方には以下のサイトなどが参考になると思います。
-    // http://www001.upp.so-net.ne.jp/isaku/rand.html
-    // ....................................................................
 
-    // パーティクルを格納したジオメトリとマテリアルからポイントオブジェクトを生成
-    points = new THREE.Points(geometry, materialPoint);
+    // ジオメトリ（引数）とマテリアルをセットしたメッシュを呼び出す
+    points = createPoints(geometry);
     // シーンにパーティクルを追加
     scene.add(points);
 
@@ -171,7 +155,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
       vertices.forEach(function (v) {
         v.z = v.z + v.velocityZ * 0.1;
 
-        if (v.z >= 20) v.z = -20;
+        if (v.z >= SIZE) v.z = -SIZE;
       });
       points.geometry.verticesNeedUpdate = true;
       requestAnimationFrame(render);
