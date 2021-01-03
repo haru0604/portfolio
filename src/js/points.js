@@ -2,8 +2,8 @@ import * as THREE from "three";
 
 function generateSprite() {
   var canvas = document.createElement("canvas");
-  canvas.width = 16;
-  canvas.height = 16;
+  canvas.width = 64;
+  canvas.height = 64;
 
   var context = canvas.getContext("2d");
   var gradient = context.createRadialGradient(
@@ -15,9 +15,13 @@ function generateSprite() {
     canvas.height / 2,
     canvas.width / 2
   );
+  // gradient.addColorStop(0, "rgba(255,255,255,1)");
+  // gradient.addColorStop(0.2, "rgba(0,255,255,1)");
+  // gradient.addColorStop(0.4, "rgba(0,0,64,1)");
+  // gradient.addColorStop(1, "rgba(0,0,0,1)");
   gradient.addColorStop(0, "rgba(255,255,255,1)");
-  gradient.addColorStop(0.2, "rgba(0,255,255,1)");
-  gradient.addColorStop(0.4, "rgba(0,0,64,1)");
+  gradient.addColorStop(0.2, "rgba(255,255,255,1)");
+  gradient.addColorStop(0.4, "rgba(255,255,255,1)");
   gradient.addColorStop(1, "rgba(0,0,0,1)");
 
   context.fillStyle = gradient;
@@ -29,10 +33,11 @@ function generateSprite() {
 }
 
 // メッシュを作成
-function createPoints(geom) {
+function Points(geom) {
   var material = new THREE.PointsMaterial({
     color: 0xffffff,
-    size: 1,
+    size: 0.4,
+    vertexColors: true,
     transparent: true,
     blending: THREE.AdditiveBlending,
     map: generateSprite(), //テクスチャ
@@ -43,4 +48,4 @@ function createPoints(geom) {
   return cloud;
 }
 
-export { createPoints };
+export { Points };

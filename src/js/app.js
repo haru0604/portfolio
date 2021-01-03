@@ -1,7 +1,8 @@
 "use strict";
 import * as THREE from "three";
-import { createPoints } from "./points";
+import { Points } from "./Points";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { BufferGeometryLoader } from "three";
 (() => {
   window.addEventListener(
     "DOMContentLoaded",
@@ -50,6 +51,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
   // 汎用変数
   let run = true; // レンダリングループフラグ
   let isDown = false; // スペースキーが押されているかどうかのフラグ
+  let startTime = 0;
 
   // three.js に関連するオブジェクト用の変数
   let scene; // シーン
@@ -61,8 +63,8 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
   let controls; // カメラコントロール
   let axesHelper; // 軸ヘルパーメッシュ
   let texture;
-  let knot;
-  const SIZE = 10.0; // どの程度の範囲に配置するかのサイズ
+  const SIZE = 1.0; // どの程度の範囲に配置するかのサイズ
+  const LONG_SIZE = SIZE * 10.0;
 
   // カメラに関するパラメータ
   const CAMERA_PARAM = {
@@ -72,7 +74,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
     far: 100.0,
     x: 0.0,
     y: 0.0,
-    z: 20.0,
+    z: 10.0,
     lookAt: new THREE.Vector3(0.0, 0.0, 0.0),
   };
   // レンダラに関するパラメータ
@@ -80,11 +82,6 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
     clearColor: 0,
     width: window.innerWidth,
     height: window.innerHeight,
-  };
-  const MATERIAL_PARAM_POINT = {
-    color: 0xff9933, // 頂点の色
-    size: 0.1, // 頂点の基本となるサイズ
-    sizeAttenuation: true, // 遠近感を出すかどうかの真偽値
   };
 
   function init() {
@@ -114,7 +111,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
     // パーティクルの定義 @@@
     geometry = new THREE.Geometry(); // 特定の形状を持たない素体ジオメトリ
 
-    const COUNT = 5000; // パーティクルの純粋な個数
+    const COUNT = 1000; // パーティクルの純粋な個数
 
     for (let i = 0; i <= COUNT; ++i) {
       // Math.random は 0 以上 1 未満の数値をランダムで返す
@@ -122,17 +119,17 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
       // const y = (Math.random() - 0.5) * 2.0 * SIZE;
       // const z = (Math.random() - 0.5) * 2.0 * SIZE;
       const theta = 2.0 * Math.PI * Math.random();
-      const x = Math.cos(theta) * (SIZE + Math.random() * 5);
-      const y = Math.sin(theta) * (SIZE + Math.random() * 5);
-      const z = (Math.random() - 0.5) * 2.0 * SIZE;
+      const x = Math.cos(theta) * (SIZE + Math.random() * 3);
+      const y = Math.sin(theta) * (SIZE + Math.random() * 3);
+      const z = (Math.random() - 0.5) * 2.0 * LONG_SIZE;
 
       const point = new THREE.Vector3(x, y, z);
       point.velocityZ = Math.random();
       geometry.vertices.push(point);
+      geometry.colors.push(new THREE.Color(Math.random() * 0x00ffff));
     }
 
-    // ジオメトリ（引数）とマテリアルをセットしたメッシュを呼び出す
-    points = createPoints(geometry);
+    points = Points(geometry);
     // シーンにパーティクルを追加
     scene.add(points);
 
@@ -145,6 +142,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
     // すべての初期化が完了したら描画を開始する
     run = true;
+    startTime = Date.now();
     render();
   }
 
@@ -153,11 +151,14 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
     if (run === true) {
       var vertices = points.geometry.vertices;
       vertices.forEach(function (v) {
-        v.z = v.z + v.velocityZ * 0.1;
+        v.z = v.z + v.velocityZ * 0.05;
 
-        if (v.z >= SIZE) v.z = -SIZE;
+        if (v.z >= LONG_SIZE) v.z = -LONG_SIZE;
       });
+      const nowTime = (Date.now() - startTime) / 1000;
       points.geometry.verticesNeedUpdate = true;
+
+      points.rotation.z = nowTime * 0.05;
       requestAnimationFrame(render);
     }
     renderer.render(scene, camera);
