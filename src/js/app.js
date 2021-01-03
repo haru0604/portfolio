@@ -82,6 +82,12 @@ import { BufferGeometryLoader } from "three";
   const SIZE = 1.0; // どの程度の範囲に配置するかのサイズ
   const LONG_SIZE = SIZE * 10.0;
 
+  const SCENE_PARAM = {
+    fogColor: 0x000000, // フォグの色
+    fogNear: 0.0, // フォグの掛かり始めるカメラからの距離
+    fogFar: 15.0, // フォグが完全に掛かるカメラからの距離
+  };
+
   // カメラに関するパラメータ
   const CAMERA_PARAM = {
     fovy: 60,
@@ -103,6 +109,11 @@ import { BufferGeometryLoader } from "three";
   function init() {
     // シーン
     scene = new THREE.Scene();
+    scene.fog = new THREE.Fog(
+      SCENE_PARAM.fogColor,
+      SCENE_PARAM.fogNear,
+      SCENE_PARAM.fogFar
+    );
 
     // レンダラ
     renderer = new THREE.WebGLRenderer();
@@ -127,7 +138,7 @@ import { BufferGeometryLoader } from "three";
     // パーティクルの定義 @@@
     geometry = new THREE.Geometry(); // 特定の形状を持たない素体ジオメトリ
 
-    const COUNT = 1000; // パーティクルの純粋な個数
+    const COUNT = 3000; // パーティクルの純粋な個数
 
     for (let i = 0; i <= COUNT; ++i) {
       // Math.random は 0 以上 1 未満の数値をランダムで返す
