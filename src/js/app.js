@@ -42,6 +42,22 @@ import { BufferGeometryLoader } from "three";
         false
       );
 
+      window.addEventListener(
+        "mousemove",
+        (event) => {
+          let x = event.clientX / window.innerWidth;
+          let y = event.clientY / window.innerHeight;
+          x = x * 2.0 - 1.0;
+          y = y * 2.0 - 1.0;
+          const mouseMoveCamera = new THREE.Vector2(x, y);
+          // const nv = mouseMoveCamera.normalize(); // 単位化 normalized vector
+          camera.position.x = mouseMoveCamera.x / 2;
+          camera.position.y = mouseMoveCamera.y / 2;
+          camera.updateProjectionMatrix();
+        },
+        false
+      );
+
       // 初期化処理
       init();
     },
@@ -118,13 +134,15 @@ import { BufferGeometryLoader } from "three";
       // const x = (Math.random() - 0.5) * 2.0 * SIZE;
       // const y = (Math.random() - 0.5) * 2.0 * SIZE;
       // const z = (Math.random() - 0.5) * 2.0 * SIZE;
-      const theta = 2.0 * Math.PI * Math.random();
-      const x = Math.cos(theta) * (SIZE + Math.random() * 3);
-      const y = Math.sin(theta) * (SIZE + Math.random() * 3);
+      const x = 0;
+      const y = 0;
       const z = (Math.random() - 0.5) * 2.0 * LONG_SIZE;
 
       const point = new THREE.Vector3(x, y, z);
+
       point.velocityZ = Math.random();
+      point.theta = 2 * Math.PI * Math.random();
+      point.rotation = (Math.random() - 0.5) * 2.0;
       geometry.vertices.push(point);
       geometry.colors.push(new THREE.Color(Math.random() * 0x00ffff));
     }
@@ -150,15 +168,18 @@ import { BufferGeometryLoader } from "three";
     // 再帰呼び出し
     if (run === true) {
       var vertices = points.geometry.vertices;
+      const nowTime = (Date.now() - startTime) / 1000;
       vertices.forEach(function (v) {
         v.z = v.z + v.velocityZ * 0.05;
-
+        v.theta += v.rotation * 0.01;
+        v.x = Math.cos(v.theta);
+        v.y = Math.sin(v.theta);
         if (v.z >= LONG_SIZE) v.z = -LONG_SIZE;
       });
-      const nowTime = (Date.now() - startTime) / 1000;
+
       points.geometry.verticesNeedUpdate = true;
 
-      points.rotation.z = nowTime * 0.05;
+      points.rotation.z = nowTime * 0.005;
       requestAnimationFrame(render);
     }
     renderer.render(scene, camera);
