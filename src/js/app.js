@@ -8,21 +8,21 @@ import { BufferGeometryLoader } from "three";
     "DOMContentLoaded",
     () => {
       // キーダウンイベントの定義
-      window.addEventListener(
-        "keydown",
-        (event) => {
-          switch (event.key) {
-            case "Escape":
-              run = event.key !== "Escape";
-              break;
-            case " ":
-              isDown = true;
-              break;
-            default:
-          }
-        },
-        false
-      );
+      // window.addEventListener(
+      //   "keydown",
+      //   (event) => {
+      //     switch (event.key) {
+      //       case "Escape":
+      //         run = event.key !== "Escape";
+      //         break;
+      //       case " ":
+      //         isDown = true;
+      //         break;
+      //       default:
+      //     }
+      //   },
+      //   false
+      // );
       window.addEventListener(
         "keyup",
         (event) => {
@@ -42,21 +42,26 @@ import { BufferGeometryLoader } from "three";
         false
       );
 
-      window.addEventListener(
-        "mousemove",
-        (event) => {
-          let x = event.clientX / window.innerWidth;
-          let y = event.clientY / window.innerHeight;
-          x = x * 2.0 - 1.0;
-          y = y * 2.0 - 1.0;
-          const mouseMoveCamera = new THREE.Vector2(x, y);
-          // const nv = mouseMoveCamera.normalize(); // 単位化 normalized vector
-          camera.position.x = mouseMoveCamera.x / 2;
-          camera.position.y = mouseMoveCamera.y / 2;
-          camera.updateProjectionMatrix();
-        },
-        false
-      );
+      // window.addEventListener(
+      //   "mousemove",
+      //   (event) => {
+      //     const delay = 20;
+      //     let x = event.clientX / window.innerWidth;
+      //     let y = event.clientY / window.innerHeight;
+      //     x = x * 2.0 - 1.0; // -1 ~ 1
+      //     y = y * 2.0 - 1.0; // -1 ~ 1
+      //     // x = x - 0.5;
+      //     // y = y - 0.5;
+      //     const mouseMoveCamera = new THREE.Vector2(x, y);
+      //     // const nv = mouseMoveCamera.normalize(); // 単位化 normalized vector
+      //     camera.position.x = mouseMoveCamera.x / 2; // カメラの移動する範囲を2分の1に
+      //     camera.position.y = -mouseMoveCamera.y / 2;
+      //     // camera.position.x += (x - camera.position.x) / delay;
+      //     // camera.position.y += (-y - camera.position.y) / delay;
+      //     camera.updateProjectionMatrix();
+      //   },
+      //   false
+      // );
 
       // 初期化処理
       init();
@@ -84,7 +89,7 @@ import { BufferGeometryLoader } from "three";
 
   const SCENE_PARAM = {
     fogColor: 0x000000, // フォグの色
-    fogNear: 0.0, // フォグの掛かり始めるカメラからの距離
+    fogNear: 0, // フォグの掛かり始めるカメラからの距離
     fogFar: 15.0, // フォグが完全に掛かるカメラからの距離
   };
 
@@ -138,7 +143,7 @@ import { BufferGeometryLoader } from "three";
     // パーティクルの定義 @@@
     geometry = new THREE.Geometry(); // 特定の形状を持たない素体ジオメトリ
 
-    const COUNT = 3000; // パーティクルの純粋な個数
+    const COUNT = 2000; // パーティクルの純粋な個数
 
     for (let i = 0; i <= COUNT; ++i) {
       // Math.random は 0 以上 1 未満の数値をランダムで返す
@@ -163,8 +168,8 @@ import { BufferGeometryLoader } from "three";
     scene.add(points);
 
     // 軸ヘルパー
-    axesHelper = new THREE.AxesHelper(5.0);
-    scene.add(axesHelper);
+    // axesHelper = new THREE.AxesHelper(5.0);
+    // scene.add(axesHelper);
 
     // コントロール
     controls = new OrbitControls(camera, renderer.domElement);

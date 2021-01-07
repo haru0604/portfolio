@@ -36,7 +36,7 @@ function generateSprite() {
 function Points(geom) {
   var material = new THREE.PointsMaterial({
     color: 0xffffff,
-    size: 0.2,
+    size: 0.08,
     vertexColors: true,
     transparent: true,
     blending: THREE.AdditiveBlending,
