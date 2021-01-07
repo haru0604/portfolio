@@ -11,5 +11,5 @@ module.exports = {
   srcjs: root + "/src/js",
   dist: root + "/dist",
   css: root + "/dist/css",
-  js: root + "/dist/js"
+  js: root + "/dist/js",
 };
