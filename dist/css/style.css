@@ -860,7 +860,7 @@ input {
 }
 
 .work-detail__txt {
-  margin-top: 16px;
+  margin-top: 8px;
 }
 
 .work-detail-head__fig {
@@ -901,7 +901,12 @@ input {
 }
 
 .work-detail-environment {
-  margin-top: 16px;
+  margin-top: 8px;
+}
+
+.work-detail-environment__ttl {
+  font-size: 1.2rem;
+  font-weight: bold;
 }
 
 .work-detail-environment__ttl:not(:first-child) {
@@ -943,6 +948,9 @@ input {
   .work-detail__description {
     font-size: 1.8rem;
   }
+  .work-detail__txt {
+    margin-top: 16px;
+  }
   .work-detail-head__fig {
     padding: 0;
     width: 640px;
@@ -953,6 +961,12 @@ input {
   }
   .work-detail-head__ttl {
     margin-top: 32px;
+  }
+  .work-detail-head__link {
+    font-size: 1.2rem;
+  }
+  .work-detail-environment__txt {
+    font-size: 1.2rem;
   }
 }
 

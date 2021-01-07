@@ -117,7 +117,10 @@
     margin-top: 32px * 0.5;
   }
   &__txt {
-    margin-top: 16px;
+    margin-top: 16px * 0.5;
+    @include mq {
+      margin-top: 16px;
+    }
   }
 }
 
@@ -161,17 +164,25 @@
   }
   &__link {
     font-size: 1rem;
+    @include mq {
+      font-size: 1.2rem;
+    }
   }
 }
 
 .work-detail-environment {
-  margin-top: 32px * 0.5;
+  margin-top: 16px * 0.5;
   &__ttl {
+    font-size: 1.2rem;
+    font-weight: bold;
     &:not(:first-child) {
       margin-top: 32px * 0.5;
     }
   }
   &__txt {
     margin-top: 16px * 0.5;
+    @include mq {
+      font-size: 1.2rem;
+    }
   }
 }
