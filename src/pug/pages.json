@@ -4,9 +4,9 @@
   "index": {
     "title": "Harumi's Portfolio",
     "keywords": "キーワード",
-    "description": "ディスクリプション",
+    "description": "This is Harumi's Portfolio site.",
     "og_type": "website",
-    "og_url": "http://www"
+    "og_url": "https://haru0604.github.io/portfolio/"
   },
   "underpage": {
     "title": "下層テストサイト",
