@@ -21,21 +21,9 @@ function doWhenIntersect(entries) {
     }
   });
 }
+var kv = document.querySelector(".kv");
+kv.style.height = `${window.innerHeight}px`;
 
-// function activateIndex(element) {
-// const currentActiveClass = document.querySelector(".is-active");
-// すでにアクティブになっているものが0個の時（=null）以外は、activeクラスを除去
-// if (currentActiveClass !== null) {
-//   currentActiveClass.classList.remove("is-active");
-// }
-//
-// }
-//
-// fadein {
-//   transition: all 300ms ease-out;
-//   opacity: 0;
-// }
-
-// fadein.on {
-//   opacity: 1;
-// }
+window.addEventListener("resize", () => {
+  kv.style.height = `${window.innerHeight}px`;
+});

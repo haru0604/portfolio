@@ -696,10 +696,6 @@ a {
   text-decoration: none;
 }
 
-a:hover {
-  opacity: 0.8;
-}
-
 button {
   font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "BIZ UDPGothic", Meiryo, sans-serif;
   outline: none;
