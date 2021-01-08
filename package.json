@@ -69,5 +69,8 @@
   "dependencies": {
     "core-js": "^3.5.0",
     "three": "^0.124.0"
+  },
+  "engines": {
+    "node": "^10.19.0"
   }
 }
